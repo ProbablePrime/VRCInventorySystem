@@ -184,7 +184,7 @@ public class InvRemapper : EditorWindow
         if (this.isAlreadySlot(target))
         {
 			//If the slot already exists, but you want to change wether the item starts as active or not, we can allow that.
-			this.toggleActivateStateOnExistingSlot(target, enableDefault);,
+			this.toggleActivateStateOnExistingSlot(target, enableDefault);
             return;
         }
 
@@ -196,6 +196,11 @@ public class InvRemapper : EditorWindow
         invSpawn.transform.parent = target.transform.parent;
         invSpawn.name = slotPrefix + "_" + target.name;
         invSpawn.transform.localScale = new Vector3(1, 1, 1);
+
+		// Rename Enable / Disable Animators, this makes it easy to see inside the final animation
+		// ENABLE -> DISABLE -> ObjectWrapper
+		invSpawn.transform.GetChild(0).name = this.getAnimatorName(target.name, true);
+		invSpawn.transform.GetChild(0).GetChild(0).name = this.getAnimatorName(target.name, false);
 
         //Get the Object child of the prefab, and set the parent of your target item to the object slot.
         Transform objectWrapper = invSpawn.transform.GetChild(0).GetChild(0).GetChild(0);
@@ -282,18 +287,26 @@ public class InvRemapper : EditorWindow
         CopyAssetReqMemeXD(disableAnimLoc);
     }
 
+	private string getAnimatorName(string objName, bool enable)
+	{
+		return objName + ((enable) ? "_ENABLE" : "_DISABLE");
+	}
     private void SetCurveOrCreatePathToInv(InventoryDirectories inventoryDirectories, string objName, AnimationClip anim, AnimationCurve firstCurve, AnimationCurve secondCurve)
     {
         Debug.Assert(anim != null, "Anim was null");
-        if (inventoryDirectories.pathToInv == "")
+		string baseSlotName = slotPrefix + "_" + objName + "/";
+		string enableAnimatorPath = baseSlotName + this.getAnimatorName(objName, true);
+		string disableAnimatorPath = enableAnimatorPath + "/" + this.getAnimatorName(objName, false);
+
+		if (inventoryDirectories.pathToInv == "")
         {
-            anim.SetCurve("Inv_" + objName + "/ENABLE", typeof(UnityEngine.Behaviour), "m_Enabled", firstCurve);
-            anim.SetCurve("Inv_" + objName + "/ENABLE/DISABLE", typeof(UnityEngine.Behaviour), "m_Enabled", secondCurve);
+            anim.SetCurve(enableAnimatorPath, typeof(UnityEngine.Behaviour), "m_Enabled", firstCurve);
+            anim.SetCurve(disableAnimatorPath, typeof(UnityEngine.Behaviour), "m_Enabled", secondCurve);
         }
         else
         {
-            anim.SetCurve(inventoryDirectories.pathToInv + "/Inv_" + objName + "/ENABLE", typeof(UnityEngine.Behaviour), "m_Enabled", firstCurve);
-            anim.SetCurve(inventoryDirectories.pathToInv + "/Inv_" + objName + "/ENABLE/DISABLE", typeof(UnityEngine.Behaviour), "m_Enabled", secondCurve);
+            anim.SetCurve(inventoryDirectories.pathToInv + "/" + enableAnimatorPath, typeof(UnityEngine.Behaviour), "m_Enabled", firstCurve);
+            anim.SetCurve(inventoryDirectories.pathToInv + "/" + disableAnimatorPath, typeof(UnityEngine.Behaviour), "m_Enabled", secondCurve);
         }
     }
 
