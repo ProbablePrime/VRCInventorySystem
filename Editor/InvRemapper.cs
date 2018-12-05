@@ -358,16 +358,16 @@ public class InvRemapper : EditorWindow
     // Find File Path
     private string findAssetPath()
     {
-		
-		string[] guids1 = AssetDatabase.FindAssets(scriptName, null);
-        string untouchedString = AssetDatabase.GUIDToAssetPath(guids1[0]);
-        string[] splitString = untouchedString.Split('/');
+		// https://answers.unity.com/comments/342333/view.html
+		MonoScript thisScript = MonoScript.FromScriptableObject(this);
+		string path = AssetDatabase.GetAssetPath(thisScript);
 
-        ArrayUtility.RemoveAt(ref splitString, splitString.Length - 1);
-        ArrayUtility.RemoveAt(ref splitString, splitString.Length - 1);
+		string[] pathParts = path.Split('/');
 
-        string filePath = string.Join("/", splitString);
-        return filePath;
+		// https://stackoverflow.com/questions/406485/array-slices-in-c-sharp
+		string rootPath = string.Join("/", pathParts.Take(pathParts.Length - 2).ToArray());
+
+		return rootPath;
     }
 
     private AnimationCurve CreateConstantCurve(float value)
