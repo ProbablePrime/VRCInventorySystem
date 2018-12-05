@@ -374,7 +374,7 @@ public class InvRemapper : EditorWindow
     {
         Keyframe[] keys = new Keyframe[2];
         Keyframe begin = new Keyframe(0, value);
-        Keyframe end = new Keyframe(0.1f, value);
+        Keyframe end = new Keyframe(0.01f, value);
         begin.outTangent = float.PositiveInfinity;
         begin.inTangent = float.NegativeInfinity;
         end.inTangent = float.NegativeInfinity;
