@@ -2,11 +2,16 @@
 
 This is an inventory system originally created by Weong, Error, and Nepsy, and modified by Xiexe to be easier to use and more user friendly.
 
-Before you start, make sure you have your items that you would like to be in your inventory on your avtar, in the correct spots. 
+## Before you start
 
-They should also be visible, set up your avatar in the way it would look with all the items activated.
+1. Make sure you have your items that you would like to be in your inventory on your avtar, in the correct spots. 
+2. Make sure the items are visible
+3. Make sure the items have reasonable **unique** names.
 
-Now, to open the tool, find "VRC Inventory" at the top of the Unity Toolbar, go to "Tools" and then hit "Inventory Remapper"
+
+## Creating the Inventory
+
+Find "VRC Inventory" at the top of the Unity Toolbar, go to "Tools" and then hit "Inventory Remapper"
 
 To use the tool, drag your avatar into the avatar slot.
 
